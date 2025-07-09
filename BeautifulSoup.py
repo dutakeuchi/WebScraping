@@ -27,16 +27,7 @@ print(table_index)
 # print(table_index)
 # %%
 print(tables[table_index].prettify())
-# %%
-for i in tables[table_index].tbody.find_all("tr"):
-    print('\n')
-    for row in i.find_all('td'):
-        rank = row[0].text.strip()
-        country = row[1]
-        pop = row[2]
-        area = row[3]
-        dens = row[4]
-        print(row, rank, country, area, dens)
+
 # %%
 tabela = pd.DataFrame(columns = ['Rank','Country','Population','Area','Density'])
 for i in tables[table_index].tbody.find_all("tr"):
@@ -57,12 +48,17 @@ tabela
         
 
 # %%
-for i in tables[table_index].tbody.find_all("tr"):
-    col = i.find_all('td')
-    # if col:
-    print(col)
-    print('\n')
+pop_df = pd.read_html(str(tables[5]), flavor='bs4')[0]
+pop_df
 # %%
-tabela = pd.DataFrame(columns = ['Rank','Country','Population','Area','Density'])
-tabela
+dataframe_list = pd.read_html(url, flavor='bs4')
+dataframe_list
+# %%
+len(dataframe_list)
+# %%
+dataframe_list[5]
+# %%
+pd.read_html(url, match="10 most densely populated countries", flavor='bs4')[0]
+# %%
+pd.read_html(url, match="10 most densely populated countries", flavor='bs4')
 # %%
