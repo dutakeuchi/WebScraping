@@ -1,13 +1,16 @@
 # %%
+# importing libraries
 from bs4 import BeautifulSoup
 import pandas as pd
 import requests
 # %%
+# getting data from web site and visualizing it
 url = 'https://www.scrapethissite.com/pages/simple/'
 data = requests.get(url).text
 soup = BeautifulSoup(data, 'html.parser')
 print(soup.prettify())
 # %%
+# creating a dataframe and adding values.
 df = pd.DataFrame(columns=('name','capital','population','area','language',))
 web = soup.find_all('div', class_="col-md-4 country")
 for i in range(len(web)):
@@ -16,11 +19,14 @@ for i in range(len(web)):
     pop = web[i].find('span', class_='country-population').get_text(strip=True)
     area = web[i].find('span', class_='country-area').get_text(strip=True)
     
+    
+# getting language from wikipedia
     name_wiki = name.replace(' ','_')
     url_wiki = 'https://simple.wikipedia.org/wiki/'
     data_wiki = requests.get(url_wiki+name_wiki).text
     soup_wiki = BeautifulSoup(data_wiki,'html.parser')
-    
+
+# language information values
     table = soup_wiki.find('table')
     if table:
         language_get = table.find('tr',class_='mergedtoprow')
@@ -38,7 +44,7 @@ for i in range(len(web)):
     
     
     # table = soup_wiki.find('table')
-    # if table:
+    # if table:  
     #     language_get = table.find('tr',class_='mergedtoprow')
     #     if language_get:
     #         find_language = language_get.find('a')
@@ -52,7 +58,7 @@ for i in range(len(web)):
     #     language_wiki = 'NO INFORMATION'
         
 
-    
+# adding values to dataframe    
     new_df = pd.DataFrame([{'name':name,
                             'capital':capital,
                             'population':pop,
@@ -63,8 +69,9 @@ for i in range(len(web)):
 df
 
 
+
 # %%
-df.language.value_counts()
+# some tables don't follow the same standarts so many languages could not get scraped.
 # %%
-df.language
+df.to_csv('Web_scraping.csv', sep=';')
 # %%
